@@ -1,0 +1,50 @@
+package main
+
+import (
+	"github.com/kataras/iris"
+	"net"
+         "os"
+	  )
+
+func main() {
+
+    iris.Get("/component=txt", func(ctx *iris.Context) {
+        ctx.Write("Hello, %s", "World! this program is writtern to fetch various performance details of a PC")
+    })
+   
+   iris.Get("/component=ip", func(ctx *iris.Context) {
+          addrs, err := net.InterfaceAddrs()
+              if err != nil {
+              os.Stderr.WriteString("Oops: " + err.Error() + "\n")
+              os.Exit(1)
+	      
+                            }
+         for _, a := range addrs {
+           if ipnet, ok := a.(*net.IPNet); ok && !ipnet.IP.IsLoopback() {
+              if ipnet.IP.To4() != nil {
+                 os.Stdout.WriteString(ipnet.IP.String() + "\n")
+		 ctx.Write("the ip address is!" )
+		 ctx.Write(ipnet.IP.String() + "\n")
+		 
+                                       }
+                                 }
+                          }
+      })
+
+    iris.Get("/component=status", func(ctx *iris.Context) {
+        ctx.Write("surprized! currently this will fetch your IP addresses.....")
+    })
+
+    iris.Get("/myjson", func(ctx *iris.Context) {
+        ctx.JSON(iris.StatusOK, iris.Map{
+            "Name":     "Iris",
+            "Released": "13 March 2016",
+            "Stars":    5525,
+        })
+    })
+
+    iris.Listen(":8072")
+}
+
+
+ 
